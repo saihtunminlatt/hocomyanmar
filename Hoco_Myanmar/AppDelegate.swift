@@ -7,40 +7,137 @@
 //
 
 import UIKit
+import OneSignal
+import NotificationCenter
+import UserNotifications
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var firstUse : UserDefaults = UserDefaults()
+    var myUrl :  UserDefaults = UserDefaults()
+    var saveRemenberPwd : UserDefaults = UserDefaults()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        FirebaseApp.configure()
+
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        
+        let first_use = appdelegate.firstUse.string(forKey: "noti")
+        
+        if first_use == nil {
+            
+            print("nil ...........")
+            
+            let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
+            OneSignal.initWithLaunchOptions(launchOptions,
+                                            appId: "5b2bba7c-8df0-42a1-8b3e-bcb48ada9481",
+                                            handleNotificationAction: nil,
+                                            settings: onesignalInitSettings)
+            
+            OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
+            OneSignal.promptForPushNotifications(userResponse: { accepted in
+                print("User accepted notifications: \(accepted)")
+            })
+        }else if first_use == "on" {
+            
+            print("on ..............")
+            
+            let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
+            OneSignal.initWithLaunchOptions(launchOptions,
+                                            appId: "5b2bba7c-8df0-42a1-8b3e-bcb48ada9481",
+                                            handleNotificationAction: nil,
+                                            settings: onesignalInitSettings)
+            
+            OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
+            OneSignal.promptForPushNotifications(userResponse: { accepted in
+                print("User accepted notifications: \(accepted)")
+            })
+        }else {
+            print("off.............")
+            
+            let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
+            OneSignal.initWithLaunchOptions(launchOptions,
+                                            appId: "",
+                                            handleNotificationAction: nil,
+                                            settings: onesignalInitSettings)
+            
+            OneSignal.inFocusDisplayType = OSNotificationDisplayType.none;
+            OneSignal.promptForPushNotifications(userResponse: { (fail) in
+                print("User accepted notifications: \(fail)")
+            })
+        }
+        
+        
+            NotificationCenter.default.addObserver(forName: Notification.Name("on"), object: nil, queue: nil, using: { (success) in
+            print("You are on state..")
+            
+            let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
+            OneSignal.initWithLaunchOptions(launchOptions,
+                                            appId: "5b2bba7c-8df0-42a1-8b3e-bcb48ada9481",
+                                            handleNotificationAction: nil,
+                                            settings: onesignalInitSettings)
+            
+            OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
+            OneSignal.promptForPushNotifications(userResponse: { accepted in
+                print("User accepted notifications: \(accepted)")
+            })
+        })
+    
+        NotificationCenter.default.addObserver(forName: Notification.Name("off"), object: nil, queue: nil, using: { (success) in
+            print("You are off state..")
+           
+            
+            let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
+            OneSignal.initWithLaunchOptions(launchOptions,
+                                            appId: "",
+                                            handleNotificationAction: nil,
+                                            settings: onesignalInitSettings)
+            
+//            OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
+//            OneSignal.promptForPushNotifications(userResponse: { accepted in
+//                print("User accepted notifications: \(accepted)")
+//            })
+            
+            OneSignal.inFocusDisplayType = OSNotificationDisplayType.none;
+            OneSignal.promptForPushNotifications(userResponse: { (fail) in
+                print("User accepted notifications: \(fail)")
+            })
+            
+        })
+      
         return true
     }
+    
+    
+    
+    
 
+    
+    
     func applicationWillResignActive(_ application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+        
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+      
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
     }
-
-
+ 
+ 
 }
 

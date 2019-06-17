@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>814436203932-p5vnc4vdm74g1pe79kh85f2frguligmc.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.814436203932-p5vnc4vdm74g1pe79kh85f2frguligmc</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCGOpsT0m-v6F3WqWzYBlsMs67oE7xYfAk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>814436203932</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>DEV.Hoco-Myanmar</string>
+	<key>PROJECT_ID</key>
+	<string>hocomyanmar-589a9</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hocomyanmar-589a9.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:814436203932:ios:b3c92bff255610de</string>
+	<key>DATABASE_URL</key>
+	<string>https://hocomyanmar-589a9.firebaseio.com</string>
+</dict>
+</plist>
