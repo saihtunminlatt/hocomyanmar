@@ -13,6 +13,9 @@ class SplashScreenVC: UIViewController {
 
     let appdelegate = UIApplication.shared.delegate as! AppDelegate
     
+    var mymanager = dbmanager()
+    var myarray = [My_DB]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -20,36 +23,32 @@ class SplashScreenVC: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        self.myarray = mymanager.getAll()
+        
+        self.HandleSplashScreen()
+    }
+    
     func HandleSplashScreen(){
          Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(HandleTimer), userInfo: nil, repeats: false)
     }
     
     @objc func HandleTimer() {
-        let checkRememberPwd = self.appdelegate.saveRemenberPwd.string(forKey: "check")
         
-        if checkRememberPwd == nil {
-            let view = storyboard?.instantiateViewController(withIdentifier: "LoginVC")as! LoginVC
+        let mystring = self.appdelegate.handleSignupform.string(forKey: "viewChange")
+        
+        if mystring == "true"{
+            let view = self.storyboard?.instantiateViewController(withIdentifier: "SWRevealViewController")as! SWRevealViewController
             view.modalTransitionStyle = .crossDissolve
             self.present(view, animated: true, completion: nil)
             
-        }else if checkRememberPwd == "true" {
-            let view = storyboard?.instantiateViewController(withIdentifier: "TabVC")as! TabVC
+        }else if mystring == nil {
+            let view = self.storyboard?.instantiateViewController(withIdentifier: "InfoOneVC")as! InfoOneVC
             view.modalTransitionStyle = .crossDissolve
             self.present(view, animated: true, completion: nil)
             
-        }else if checkRememberPwd == "false" {
-            let view = storyboard?.instantiateViewController(withIdentifier: "LoginVC")as! LoginVC
-            view.modalTransitionStyle = .crossDissolve
-            self.present(view, animated: true, completion: nil)
-            
-        }else if checkRememberPwd == "success" {
-            let view = storyboard?.instantiateViewController(withIdentifier: "TabVC")as! TabVC
-            view.modalTransitionStyle = .crossDissolve
-            self.present(view, animated: true, completion: nil)
-            
+            }
         }
-       
-    }
 
-   
 }

@@ -17,7 +17,6 @@ class CartVC: UIViewController,UIWebViewDelegate {
     @IBOutlet weak var CartWebView: UIWebView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.showLoading()
         CartWebView.reload()
         self.setUpView()
     }
@@ -102,15 +101,17 @@ class CartVC: UIViewController,UIWebViewDelegate {
     
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
         if request.url?.absoluteString == "https://www.hocomyanmar.com/logout" {
-            if let tabbar = (storyboard!.instantiateViewController(withIdentifier: "TabVC") as? UITabBarController) {
-                self.present(tabbar, animated: true, completion: nil)
-            }
+
+            let view = self.storyboard?.instantiateViewController(withIdentifier: "SWRevealViewController")as! SWRevealViewController
+            view.modalTransitionStyle = .crossDissolve
+            self.present(view, animated: true, completion: nil)
         }
         
         if request.url?.absoluteString == "https://www.hocomyanmar.com/"{
-            if let tabbar = (storyboard!.instantiateViewController(withIdentifier: "TabVC") as? UITabBarController) {
-                self.present(tabbar, animated: true, completion: nil)
-            }
+
+            let view = self.storyboard?.instantiateViewController(withIdentifier: "SWRevealViewController")as! SWRevealViewController
+            view.modalTransitionStyle = .crossDissolve
+            self.present(view, animated: true, completion: nil)
         }
         
         return true

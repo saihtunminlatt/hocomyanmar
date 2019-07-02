@@ -10,80 +10,177 @@ import UIKit
 import Alamofire
 import IHProgressHUD
 
-class HomeVC: UIViewController,UIWebViewDelegate,UIScrollViewDelegate {
+class HomeVC: UIViewController,UIScrollViewDelegate,UIWebViewDelegate {
 
-    //@IBOutlet weak var webView: WKWebView!
-    @IBOutlet weak var HomeWebView: UIWebView!
+    var appdelegate = UIApplication.shared.delegate as! AppDelegate
+    
+    var name : String = ""
+    var id : String = ""
+    
+    var myWebView = UIWebView()
+    
+    @IBOutlet weak var mainView: UIView!
     
     
-    var myUrl : String = "https://www.hocomyanmar.com/"
-    
-    override func viewDidLoad() {
+        override func viewDidLoad() {
         super.viewDidLoad()
-       
-       self.showLoading()
-        HomeWebView.reload()
-        self.setUpView()
-
-    }
-  
-    
-    //:- set up view
-    func setUpView(){
-        if NetworkManager.isConnected() == true {
-            self.showLoading()
             
-            let homeurl = URL(string: myUrl)
-            HomeWebView.loadRequest(URLRequest(url: homeurl!))
-            HomeWebView.delegate = self
-           
-        }else {
-            self.hideLoding()
-            let alert = UIAlertController(title: "No Internet!", message: "Make sure your device is connected to internet.", preferredStyle: .alert)
+         
+            let mystring = appdelegate.search.string(forKey: "search")
             
-            let okbutton = UIAlertAction(title: "Reload", style: .default, handler: {(_ alert: UIAlertAction) -> Void in
-                self.showLoading()
-                Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.HandleReloadView), userInfo: nil, repeats: false)
+            self.id = appdelegate.id.string(forKey: "id") ?? ""
+            self.name = appdelegate.name.string(forKey: "name") ?? ""
+            
+            if mystring == "true" {
+                self.mainView.isHidden = true
                 
-            })
+                myWebView.reload()
+
+                 myWebView = UIWebView(frame: CGRect(x:0, y:0, width: view.frame.size.width, height:view.frame.size.height))
+
+                self.view.addSubview(myWebView)
+
+                myWebView.delegate = self
+
+                let myURL = URL(string: "https://www.hocomyanmar.com/products/list?category_id=\(id)&name=\(name)")
+                let myURLRequest:URLRequest = URLRequest(url: myURL!)
+                myWebView.loadRequest(myURLRequest)
+                
+            }else if mystring == "false" {
+                self.mainView.isHidden = false
+                setUpView()
+            }else if mystring == nil {
+                self.mainView.isHidden = false
+                setUpView()
+            }
             
-            alert.addAction(okbutton)
-            
-            self.present(alert,animated: true)
-        }
+
     }
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        HomeWebView.reload()
-//        self.hideLoding()
-//    }
-    
-
-    //:-show loading
+ 
     func showLoading(){
-        self.view.isUserInteractionEnabled = false
+        self.view.isUserInteractionEnabled = true
         IHProgressHUD.set(backgroundColor: UIColor.clear)
         IHProgressHUD.set(foregroundColor: UIColor.lightGray)
         IHProgressHUD.show()
         
     }
     func hideLoding(){
-        self.view.isUserInteractionEnabled = true
+
+        self.view.isUserInteractionEnabled = false
         IHProgressHUD.dismiss()
         
     }
-
-    //:->Handle reload alert button
-    @objc func HandleReloadView(){
-        self.setUpView()
-    }
-    
     
     func webViewDidStartLoad(_ webView: UIWebView) {
-        if NetworkManager.isConnected() == true{
-            self.showLoading()
-            print("start...")
+        self.showLoading()
+
+    }
+    
+    func webViewDidFinishLoad(_ webView: UIWebView) {
+        self.hideLoding()
+        self.view.isUserInteractionEnabled = true
+
+    }
+    
+    func setUpView() {
+        if NetworkManager.isConnected() == true {
+        self.showLoading()
+            
+            let myheight = mainView.frame.size.height
+            let mywidth  = mainView.frame.size.width
+            
+            let myview = self.appdelegate.setUpMainView.string(forKey: "main")
+            
+            if myview == nil {
+                if let xibview = Bundle.main.loadNibNamed("HomeView", owner: self, options: nil)?.first as? HomeView{
+                    xibview.frame.size.height = myheight
+                    xibview.frame.size.width = mywidth
+                    
+                    self.mainView.addSubview(xibview)
+                  }
+            }else if myview == "selfie" {
+                    if let xibview = Bundle.main.loadNibNamed("SelfieView", owner: self, options: nil)?.first as? SelfieView{
+                        xibview.frame.size.height = myheight
+                        xibview.frame.size.width = mywidth
+                        
+                        self.mainView.addSubview(xibview)
+                }
+            }else if myview == "mobile" {
+                if let xibview = Bundle.main.loadNibNamed("MobileView", owner: self, options: nil)?.first as? MobileView{
+                    xibview.frame.size.height = myheight
+                    xibview.frame.size.width = mywidth
+                    
+                    self.mainView.addSubview(xibview)
+                }
+            }else if myview == "power" {
+                if let xibview = Bundle.main.loadNibNamed("PowerView", owner: self, options: nil)?.first as? PowerView{
+                    xibview.frame.size.height = myheight
+                    xibview.frame.size.width = mywidth
+                    
+                    self.mainView.addSubview(xibview)
+                }
+            }else if myview == "wireless" {
+                if let xibview = Bundle.main.loadNibNamed("WirelessView", owner: self, options: nil)?.first as? WirelessView{
+                    xibview.frame.size.height = myheight
+                    xibview.frame.size.width = mywidth
+                    
+                    self.mainView.addSubview(xibview)
+                }
+            }else if myview == "earphone" {
+                if let xibview = Bundle.main.loadNibNamed("EarphoneView", owner: self, options: nil)?.first as? EarphoneView{
+                    xibview.frame.size.height = myheight
+                    xibview.frame.size.width = mywidth
+                    
+                    self.mainView.addSubview(xibview)
+                }
+            }else if myview == "smart" {
+                if let xibview = Bundle.main.loadNibNamed("SmartChargerView", owner: self, options: nil)?.first as? SmartChargerView{
+                    xibview.frame.size.height = myheight
+                    xibview.frame.size.width = mywidth
+                    
+                    self.mainView.addSubview(xibview)
+                }
+            }else if myview == "car" {
+                if let xibview = Bundle.main.loadNibNamed("CarChargerView", owner: self, options: nil)?.first as? CarChargerView{
+                    xibview.frame.size.height = myheight
+                    xibview.frame.size.width = mywidth
+                    
+                    self.mainView.addSubview(xibview)
+                }
+            }else if myview == "cart" {
+                if let xibview = Bundle.main.loadNibNamed("CartView", owner: self, options: nil)?.first as? CartView{
+                    xibview.frame.size.height = myheight
+                    xibview.frame.size.width = mywidth
+                    
+                    self.mainView.addSubview(xibview)
+                }
+            }else if myview == "signup" {
+                if let xibview = Bundle.main.loadNibNamed("SignupView", owner: self, options: nil)?.first as? SignupView{
+                    xibview.frame.size.height = myheight
+                    xibview.frame.size.width = mywidth
+                    
+                    self.mainView.addSubview(xibview)
+                }
+            }else if myview == "favourite" {
+                if let xibview = Bundle.main.loadNibNamed("FavouriteView", owner: self, options: nil)?.first as? FavouriteView{
+                    xibview.frame.size.height = myheight
+                    xibview.frame.size.width = mywidth
+                    
+                    self.mainView.addSubview(xibview)
+                }
+            }else if myview == "signin" {
+                if let xibview = Bundle.main.loadNibNamed("SigninView", owner: self, options: nil)?.first as? SigninView{
+                    xibview.frame.size.height = myheight
+                    xibview.frame.size.width = mywidth
+                    
+                    self.mainView.addSubview(xibview)
+                }
+            }
+            
+                
         }else {
+            
             let alert = UIAlertController(title: "No Internet!", message: "Make sure your device is connected to internet.", preferredStyle: .alert)
             
             let okbutton = UIAlertAction(title: "Reload", style: .default, handler: {(_ alert: UIAlertAction) -> Void in
@@ -97,25 +194,13 @@ class HomeVC: UIViewController,UIWebViewDelegate,UIScrollViewDelegate {
             self.present(alert,animated: true)
             
         }
+            
+    }
+        
+    @objc func HandleReloadView() {
+        self.setUpView()
+    }
+    
 
-    }
-    
-    func webViewDidFinishLoad(_ webView: UIWebView) {
-        print("finish...")
-        self.hideLoding()
-    }
-    
-    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
-        if request.url?.absoluteString == "https://www.hocomyanmar.com/" {
-            print("This url is true.....")
-        }
-        if request.url?.absoluteString == "https://www.hocomyanmar.com/logout" {
-            if let tabbar = (storyboard!.instantiateViewController(withIdentifier: "TabVC") as? UITabBarController) {
-                self.present(tabbar, animated: true, completion: nil)
-            }
-        }
-        return true
-    }
-    
-    
 }
+

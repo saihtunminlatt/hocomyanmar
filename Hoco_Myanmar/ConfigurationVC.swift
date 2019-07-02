@@ -15,15 +15,23 @@ class ConfigurationVC: UIViewController {
    
     var appdelegate = UIApplication.shared.delegate as! AppDelegate
     
+    @IBOutlet weak var userView: UIView!
     @IBOutlet weak var userEmail: UILabel!
     @IBOutlet weak var btnAppStore: UIButton!
     @IBOutlet weak var notiSwitch: UISwitch!
     
     var currentEmail : String = ""
     
+    var mymanager = dbmanager()
+    var myarray = [My_DB]()
+    
+    var username : String = ""
+    
     override func viewDidLoad() {
         
+        userView.isHidden = true
         super.viewDidLoad()
+        self.hideLoding()
         
        btnAppStore.layer.cornerRadius = 5
        btnAppStore.layer.masksToBounds = true
@@ -41,20 +49,29 @@ class ConfigurationVC: UIViewController {
             notiSwitch.isOn = false
         }
         
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let useremaiil = Auth.auth().currentUser?.email
-        
-        self.currentEmail = useremaiil!
-        
-        self.userEmail.text = currentEmail
 
+        self.myarray = mymanager.getAll()
+        for aa in myarray {
+            self.username = aa.username
+        }
+        
+        self.userEmail.text = username
+
+        var showView = self.appdelegate.viewChange.string(forKey: "view")
+        
+        if showView == "true" {
+            userView.isHidden = false
+        }else if showView == "false" {
+            userView.isHidden = true
+            
+        }
     }
    
     @IBAction func onClickAppStoreView(_ sender: UIButton) {
-        exit(0)
+  
     }
     
   
@@ -75,41 +92,6 @@ class ConfigurationVC: UIViewController {
         self.present(view, animated: true, completion: nil)
     }
     
-    @IBAction func onclickSignOut(_ sender: UIButton) {
-        
-        let alert = UIAlertController(title: "Hello User", message: "Are you sure to logout?", preferredStyle: .alert)
-        
-        let okbutton = UIAlertAction(title: "Ok", style: .default, handler: {(_ alert: UIAlertAction) -> Void in
-            self.appdelegate.saveRemenberPwd.set("false", forKey: "check")
-            
-            self.showLoading()
-            self.viewChangeToLoginVC()
-            
-        })
-        
-        let cancelBtn = UIAlertAction(title: "Cancel", style: .default, handler: {(_ alert: UIAlertAction) -> Void in
-        })
-        
-        alert.addAction(okbutton)
-        alert.addAction(cancelBtn)
-        
-        self.present(alert,animated: true)
-        
-        
-    }
-    
-    func viewChangeToLoginVC(){
-        Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(viewChangeWithTimer), userInfo: nil, repeats: false)
-    }
-    
-    //:handle view change
-    @objc func viewChangeWithTimer(){
-        self.hideLoding()
-        
-        let view = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC")as! LoginVC
-        view.modalTransitionStyle = .crossDissolve
-        self.present(view, animated: true, completion: nil)
-    }
     
     //:->showloading
     func showLoading(){
@@ -119,11 +101,18 @@ class ConfigurationVC: UIViewController {
         IHProgressHUD.show()
         
     }
+    @IBAction func onClickSignUp(_ sender: UIButton) {
+        let view = storyboard?.instantiateViewController(withIdentifier: "SignupOrSkipVC")as! SignupOrSkipVC
+        view.modalTransitionStyle = .crossDissolve
+        self.present(view, animated: true, completion: nil)
+    }
     
     func hideLoding(){
         self.view.isUserInteractionEnabled = true
         IHProgressHUD.dismiss()
         
-    }
+      }
   
+    
 }
+

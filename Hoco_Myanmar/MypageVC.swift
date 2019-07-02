@@ -12,16 +12,12 @@ import Alamofire
 
 class MypageVC: UIViewController,UIWebViewDelegate {
     
-    //@IBOutlet weak var webView: WKWebView!
-    
-    
+    var appdelegate = UIApplication.shared.delegate as! AppDelegate
     @IBOutlet weak var MypageWebView: UIWebView!
     var myUrl : String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.showLoading()
-        
         MypageWebView.reload()
 
         myUrl = "https://www.hocomyanmar.com/mypage/login"
@@ -117,15 +113,19 @@ class MypageVC: UIViewController,UIWebViewDelegate {
     
     func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
         if request.url?.absoluteString == "https://www.hocomyanmar.com/logout" {
-            if let tabbar = (storyboard!.instantiateViewController(withIdentifier: "TabVC") as? UITabBarController) {
-                self.present(tabbar, animated: true, completion: nil)
-            }
+            
+            let view = self.storyboard?.instantiateViewController(withIdentifier: "SWRevealViewController")as! SWRevealViewController
+            view.modalTransitionStyle = .crossDissolve
+            self.present(view, animated: true, completion: nil)
         }
         
         if request.url?.absoluteString == "https://www.hocomyanmar.com/"{
-            if let tabbar = (storyboard!.instantiateViewController(withIdentifier: "TabVC") as? UITabBarController) {
-                self.present(tabbar, animated: true, completion: nil)
-            }
+            self.appdelegate.setUpMainView.set(nil, forKey: "main")
+             self.appdelegate.search.set("false", forKey: "search")
+
+            let view = self.storyboard?.instantiateViewController(withIdentifier: "SWRevealViewController")as! SWRevealViewController
+            view.modalTransitionStyle = .crossDissolve
+            self.present(view, animated: true, completion: nil)
         }
         
         return true

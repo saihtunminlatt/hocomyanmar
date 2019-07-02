@@ -19,6 +19,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var firstUse : UserDefaults = UserDefaults()
     var myUrl :  UserDefaults = UserDefaults()
     var saveRemenberPwd : UserDefaults = UserDefaults()
+    var handleSignupform : UserDefaults = UserDefaults()
+    
+    var setUpMainView : UserDefaults = UserDefaults()
+    var search : UserDefaults = UserDefaults()
+    
+    var viewChange : UserDefaults = UserDefaults()
+
+    var id : UserDefaults = UserDefaults()
+    var name : UserDefaults = UserDefaults()
+    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -96,12 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                             appId: "",
                                             handleNotificationAction: nil,
                                             settings: onesignalInitSettings)
-            
-//            OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
-//            OneSignal.promptForPushNotifications(userResponse: { accepted in
-//                print("User accepted notifications: \(accepted)")
-//            })
-            
+                
             OneSignal.inFocusDisplayType = OSNotificationDisplayType.none;
             OneSignal.promptForPushNotifications(userResponse: { (fail) in
                 print("User accepted notifications: \(fail)")
